@@ -203,6 +203,7 @@ body.gn-opening .gn-door-r{animation:gnDoorR 1.5s cubic-bezier(.5,0,.25,1) forwa
 #gate .to-label{font-family:var(--f-ui); font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; opacity:.75; margin-top:1.6rem;}
 #gate .names{font-family:var(--f-script); font-size:clamp(2.6rem,2rem + 3.4vw,4.4rem); margin-top:.5rem; color:var(--gold-light); line-height:1;}
 #gate .guest{font-family:var(--f-ui); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; opacity:.7; margin-top:1.4rem;}
+#gate .guest .guest-name{display:block; margin-top:.4rem; font-size:1.05rem; letter-spacing:.03em; text-transform:none; opacity:1; font-weight:600; color:var(--gold-light);}
 #gate .btn{margin-top:2.1rem;}
 @media (prefers-reduced-motion:reduce){ #gate .gate-content{animation:none;} }
 
@@ -531,7 +532,7 @@ footer.site-foot{
     <p class="bismillah">Bismillahirrahmanirrahim</p>
     <p class="to-label">Undangan Pernikahan</p>
     <h1 class="names">Ega &amp; Dodi</h1>
-    <p class="guest">Kepada Bapak / Ibu / Saudara/i<br>Tamu undangan yang berbahagia</p>
+    <p class="guest" id="guestLine">Kepada Bapak / Ibu / Saudara/i<br>Tamu undangan yang berbahagia</p>
     <button class="btn" id="openBtn" type="button">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18v13H3z"/><path d="M3 6l9 7 9-7"/></svg>
       Buka Undangan
@@ -865,6 +866,25 @@ footer.site-foot{
 (function(){
   "use strict";
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- GUEST NAME FROM ?to= ---------- */
+  (function(){
+    var raw = new URLSearchParams(window.location.search).get('to');
+    if(!raw) return;
+    var name = raw.trim().slice(0, 60).split(/[\s+_-]+/).filter(Boolean).map(function(w){
+      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    }).join(' ');
+    if(!name) return;
+    var line = document.getElementById('guestLine');
+    if(!line) return;
+    line.textContent = '';
+    line.appendChild(document.createTextNode('Kepada Yth. Bapak/Ibu/Saudara/i'));
+    var nameEl = document.createElement('span');
+    nameEl.className = 'guest-name';
+    nameEl.textContent = name;
+    line.appendChild(nameEl);
+    document.title = name + ' — Undangan Pernikahan Ega & Dodi';
+  })();
 
   /* ---------- GATE ---------- */
   var gate = document.getElementById('gate');
