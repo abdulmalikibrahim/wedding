@@ -353,7 +353,11 @@ body.gn-opening .gn-door-r{animation:gnDoorR 1.5s cubic-bezier(.5,0,.25,1) forwa
 .event-card h3{font-family:var(--f-display); font-size:1.6rem; margin-top:.7rem; text-wrap:balance;}
 .event-card .time{font-family:var(--f-ui); font-size:1.25rem; letter-spacing:.06em; margin-top:.5rem; color:var(--gold-light);}
 .event-card .place{margin-top:.6rem; opacity:.9;}
-.event-card .btn{margin-top:1.6rem;}
+.event-card .address{margin-top:.4rem; font-size:.88rem; opacity:.75; line-height:1.55;}
+.event-actions{display:flex; flex-wrap:wrap; justify-content:center; gap:.8rem; margin-top:1.6rem;}
+.event-actions .btn{margin-top:0;}
+.btn.ghost.gold{border-color:rgba(232,200,120,.55); color:var(--gold-light);}
+.btn.ghost.gold:hover{background:rgba(232,200,120,.12); border-color:var(--gold-light);}
 
 /* ============================= GALLERY ============================= */
 #galeri{background:var(--paper-deep);}
@@ -713,10 +717,17 @@ footer.site-foot{
       <h3>Minggu, 20 September 2026</h3>
       <p class="time">09.00 WIB</p>
       <p class="place">Kediaman Mempelai Wanita</p>
-      <button class="btn" id="icsBtn" type="button">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-        Simpan ke Kalender
-      </button>
+      <p class="address">Jl. Sumur Bandung, Blok Kubang Gading, RT/RW 16/07<br>Desa Cipancuh, Kec. Haurgeulis, Kab. Indramayu</p>
+      <div class="event-actions">
+        <button class="btn" id="icsBtn" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          Simpan ke Kalender
+        </button>
+        <a class="btn ghost gold" href="https://www.google.com/maps?q=-6.451641082763672,107.94026184082031&amp;z=17&amp;hl=id" target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Lihat Lokasi
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -994,6 +1005,7 @@ footer.site-foot{
   if(window.claude && typeof window.claude.use === 'function'){
     window.claude.use('downloads').then(function(ns){ downloadsNS = ns; }).catch(function(){});
   }
+  var venueAddress = 'Kediaman Mempelai Wanita, Jl. Sumur Bandung, Blok Kubang Gading, RT/RW 16/07, Desa Cipancuh, Kec. Haurgeulis, Kab. Indramayu';
   document.getElementById('icsBtn').addEventListener('click', async function(){
     var stamp = new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
     var ics = [
@@ -1005,7 +1017,7 @@ footer.site-foot{
       'DTEND:20260920T040000Z',
       'SUMMARY:Akad Nikah Ega \\& Dodi',
       'DESCRIPTION:Akad Nikah Ega Ainun Rizq \\& Dodi Guruh Saputra',
-      'LOCATION:Kediaman Mempelai Wanita',
+      'LOCATION:' + venueAddress.replace(/,/g, '\\,'),
       'END:VEVENT','END:VCALENDAR'
     ].join('\r\n');
     if(downloadsNS){
@@ -1014,7 +1026,7 @@ footer.site-foot{
         return;
       }catch(e){ /* fall through to manual */ }
     }
-    window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Akad+Nikah+Ega+%26+Dodi&dates=20260920T020000Z/20260920T040000Z&location=Kediaman+Mempelai+Wanita&details=Akad+Nikah+Ega+Ainun+Rizq+%26+Dodi+Guruh+Saputra', '_blank', 'noopener');
+    window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Akad+Nikah+Ega+%26+Dodi&dates=20260920T020000Z/20260920T040000Z&location=' + encodeURIComponent(venueAddress) + '&details=Akad+Nikah+Ega+Ainun+Rizq+%26+Dodi+Guruh+Saputra', '_blank', 'noopener');
   });
 
   /* ---------- COPY TO CLIPBOARD ---------- */
